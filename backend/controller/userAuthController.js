@@ -28,13 +28,14 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
   });
   const maxAgeCookie = parseInt(process.env.COOKIE_MAX_AGE);
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production" ? true : false, //only use in production for https
-    sameSite: "None", //save from CSRF attack
-    maxAge: maxAgeCookie, //1days
-    path: "/",
-    domain: ".onrender.com", // this should match the backend domain
+    httpOnly: true, // Prevent client-side access
+    secure: process.env.NODE_ENV === "production", // Only use secure cookies in production
+    sameSite: "None", // Required for cross-origin cookies
+    maxAge: 24 * 60 * 60 * 1000, // Ensure this is set (e.g., 24 hours in milliseconds)
+    path: "/", // Root path for the cookie
+    // domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined, // Domain for production
   });
+
   res.status(200).json({
     status: true,
     accessToken: accessToken,
