@@ -30,9 +30,10 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production" ? true : false, //only use in production for https
-    samesite: "None", //save from CSRF attack
+    sameSite: "None", //save from CSRF attack
     maxAge: maxAgeCookie, //1days
     path: "/",
+    domain: ".onrender.com", // this should match the backend domain
   });
   res.status(200).json({
     status: true,
