@@ -27,16 +27,13 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
     email: user.email,
   });
   const maxAgeCookie = parseInt(process.env.COOKIE_MAX_AGE);
-  res.cookie(
-    "refreshToken",
-    refreshToken
-    //   {
-    //   httpOnly: true,
-    //   // secure: process.env.NODE_ENV === "production" ? true : false, //only use in production for https
-    //   // samesite: "Strict", //save from CSRF attack
-    //   maxAge: maxAgeCookie, //1days
-    // }
-  );
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production" ? true : false, //only use in production for https
+    samesite: "None", //save from CSRF attack
+    maxAge: maxAgeCookie, //1days
+    path: "/",
+  });
   res.status(200).json({
     status: true,
     accessToken: accessToken,
